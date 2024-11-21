@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Report</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js" integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+  <div class="button-container">
+    <button class="button" onclick="copyToClipboard()">
+      clipboard
+    </button>
+    <button class="button" onclick="printReport()">
+      Print
+    </button>
+    <button class="button" onclick="exportToJson()">Export to JSON</button>
+    <button class="button" onclick="addClient()">Add Client</button>
+    <div>
+      <input type="file" id="jsonFileInput" style="display: none;" onchange="importFromJson(event)" />
+      <button class="button" onclick="document.getElementById('jsonFileInput').click()">Import from JSON</button>
+    </div>
+  </div>
+  <div class="clients-container">
+    <div class="report-container">
+      <button class="edit-button" onclick="toggleEdit(this)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+          <path d="M13.5 6.5l4 4" />
+        </svg>
+      </button>
+      <div class="client-title">Metro</div>
+      <div class="content">
+        <div class="section">
+          <h2>Overall Status</h2>
+          <ul>
+            <li>Active Use Cases: 3</li>
+            <li>Users: 164 (Active: 50)</li>
+            <li>Voice Adoption: Medium</li>
+            <li>Satisfaction: Neutral</li>
+            <li>
+              Next Milestone:
+              <span class="next-milestone">200 users by mid-December</span>
+            </li>
+          </ul>
+        </div>
+        <div class="section">
+          <h2>Use Cases</h2>
+          <div class="use-cases-container">
+            <div class="use-case-card">
+              <p><strong>Use Case Name: Temperature Register</strong></p>
+              <p><strong>Phase: Production Scale Up</strong></p>
+              <p><strong>Users: 28 stores / ~164 users</strong></p>
+              <p>
+                <strong>Risks: Low voice performance (BSR-347 & BSR-343);
+                  inconsistencies with 'Recheck' after >1 month
+                  (RDM-8059)</strong>
+              </p>
+            </div>
+
+            <div class="use-case-card">
+              <p><strong>Use Case Name: Store Visits</strong></p>
+              <p><strong>Phase: Production Roll Out</strong></p>
+              <p><strong>Users: 3 active</strong></p>
+              <p>
+                <strong>Risks: Cannot rearrange containers in forms (RDM-9022);
+                  login issues for new stores (BSR-388)</strong>
+              </p>
+            </div>
+
+            <div class="use-case-card">
+              <p><strong>Use Case Name: Loss Prevention Audit</strong></p>
+              <p><strong>Use Case Name: Loss Prevention Audit</strong></p>
+              <p><strong>Phase: Scoping / Onboarding</strong></p>
+              <p><strong>Users: 7</strong></p>
+              <p><strong>Risks: N/A</strong></p>
+            </div>
+
+            <div class="use-case-card">
+              <p><strong>Use Case Name: Maintenance Forms</strong></p>
+              <p><strong>Phase: Scoping</strong></p>
+              <p><strong>Users: TBD</strong></p>
+              <p><strong>Risks: N/A</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-container">
+      <button class="edit-button" onclick="toggleEdit(this)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-pencil">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+          <path d="M13.5 6.5l4 4" />
+        </svg>
+      </button>
+      <div class="client-title">Kenvue</div>
+      <div class="content">
+        <div class="section">
+          <h2>Overall Status</h2>
+          <ul>
+            <li>Active Use Cases: 3</li>
+            <li>Users: 25 (Active: None)</li>
+            <li>Voice Adoption: Medium</li>
+            <li>Satisfaction: Neutral</li>
+            <li>
+              Next Milestone:
+              <span class="next-milestone">Pilots concluding by November</span>
+            </li>
+          </ul>
+        </div>
+        <div class="section">
+          <h2>Use Cases</h2>
+          <div class="use-cases-container">
+            <div class="use-case-card">
+              <p>
+                <strong>Use Case Name: Fort Washington - Batch Release</strong>
+              </p>
+              <p><strong>Phase: Pilot complete, ongoing usage</strong></p>
+              <p><strong>Users: 11 users + 8 supervisors</strong></p>
+              <p><strong>Risks: Background noise and WiFi issues</strong></p>
+            </div>
+
+            <div class="use-case-card">
+              <p>
+                <strong>Use Case Name: Brazil - Work Order Creation</strong>
+              </p>
+              <p><strong>Phase: Pilot ended on 13.11</strong></p>
+              <p>
+                <strong>Users: 2/8 active (vacation impacting usage)</strong>
+              </p>
+              <p><strong>Risks: N/A</strong></p>
+            </div>
+
+            <div class="use-case-card">
+              <p>
+                <strong>Use Case Name: Indonesia - IHI Cleaning &
+                  Sanitation</strong>
+              </p>
+              <p><strong>Phase: Pilot started on 29.10</strong></p>
+              <p><strong>Users: 6/6 users</strong></p>
+              <p>
+                <strong>Risks: Voice accuracy improving (74% up from 33%) but
+                  depends on A2I annotations</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  </div>
+</body>
+
+</html>
