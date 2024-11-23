@@ -1,5 +1,49 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: #f4f4f9;
@@ -15,8 +59,10 @@ body {
 }
 
 .button {
-  display: inline-block;
-  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
   background-color: #2d87f0;
   color: white;
   font-size: 14px;
@@ -25,7 +71,12 @@ body {
   border-radius: 5px;
   cursor: pointer;
   text-align: center;
-  max-width: 200px;
+  width: 40px; /* Set a fixed width */
+  height: 40px; /* Set a fixed height */
+}
+
+.button svg {
+  margin: 2px;
 }
 
 .button:hover {
@@ -37,6 +88,7 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
+  align-content: center;
 }
 
 .report-container {
@@ -68,10 +120,31 @@ body {
   cursor: pointer;
 }
 
+
 .edit-button svg {
   width: 21px;
   height: 21px;
   color: #2d87f0;
+}
+
+.add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background-color: #2d87f0;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  width: 21px; /* Set a fixed width */
+  height: 21px; /* Set a fixed height */
+}
+.add-button svg {
+  margin: 2px;
 }
 
 .remove-button svg {
@@ -127,7 +200,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 5px;
+  padding: 5p
 }
 
 .use-case-card p {
@@ -150,4 +223,80 @@ body {
   font-size: 12px;
   width: 100%;
   box-sizing: border-box;
+}
+
+.toast {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+.toast.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  width: 100%;
+}
+
+.empty-state-content {
+  text-align: center;
+  color: #666;
+}
+
+.empty-state-content p {
+  font-size: 1.2em;
+  margin: 8px 0;
+}
+
+.toast {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+.toast.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.client-button {
+  display: none;
+}
+
+.edit-mode .client-button {
+  display: flex;
+}
+
+/* When edit mode is active */
+.button.toggle-edit.edit-mode {
+  background-color: #0001004a !important; /* Higher specificity */
+  color: #1a5eaf;
 }
