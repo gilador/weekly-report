@@ -1,0 +1,113 @@
+{
+  "clients": [
+    {
+      "client": "Metro",
+      "overallStatus": {
+        "activeusecases": ["3", "number"],
+        "users": {
+          "total": ["164", "number"],
+          "active": ["50", "number"]
+        },
+        "voiceadoption": ["Medium", "string"],
+        "satisfaction": ["Neutral", "string"],
+        "nextmilestone": ["200 users by mid-December", "string"]
+      },
+      "useCases": [
+        {
+          "Name": "Temperature Register",
+          "Phase": "Production Scale Up",
+          "Timing": "On track",
+          "Users": "28 stores / ~164 users; Target: 40 stores / 213 users by early December",
+          "RisksOrBlockers": "Low voice performance (BSR-347 & BSR-343); inconsistencies with “Recheck” after >1 month (RDM-8059)",
+          "Notes": "N/A"
+        },
+        {
+          "Name": "Store Visits",
+          "Phase": "Production Roll Out",
+          "Timing": "Delayed by client; onboard remaining users after holidays",
+          "Users": "3 active; Target: 47 total planned",
+          "RisksOrBlockers": "Cannot rearrange containers in forms (RDM-9022); login issues for new stores (BSR-388)",
+          "Notes": "N/A"
+        },
+        {
+          "Name": "Loss Prevention Audit",
+          "Phase": "Scoping / Onboarding",
+          "Timing": "Refine form in December; Production rollout in February 2025",
+          "Users": "7",
+          "RisksOrBlockers": "N/A",
+          "Notes": "This is not a voice use case."
+        },
+        {
+          "Name": "Maintenance Forms",
+          "Phase": "Scoping",
+          "Timing": "TBD",
+          "Users": "TBD",
+          "RisksOrBlockers": "N/A",
+          "Notes": "N/A"
+        }
+      ]
+    },
+    {
+      "client": "Kenvue",
+      "overallStatus": {
+        "activeusecases": ["3", "number"],
+        "users": {
+          "total": ["25", "number"],
+          "active": ["N/A", "N/A"]
+        },
+        "voiceadoption": ["Medium", "string"],
+        "satisfaction": ["Neutral", "string"],
+        "nextmilestone": ["Pilots concluding by November", "string"]
+      },
+      "useCases": [
+        {
+          "Name": "Fort Washington - Batch Release",
+          "Phase": "Pilot complete, ongoing usage",
+          "Timing": "N/A",
+          "Users": "11 users + 8 supervisors",
+          "RisksOrBlockers": "Background noise and WiFi issues",
+          "Notes": "N/A"
+        },
+        {
+          "Name": "Brazil - Work Order Creation",
+          "Phase": "Pilot ended on 13.11",
+          "Timing": "3-4 weeks",
+          "Users": "2/8 active (vacation impacting usage)",
+          "RisksOrBlockers": "N/A",
+          "Notes": "Maintenance only performed on Mondays and Fridays"
+        },
+        {
+          "Name": "Indonesia - IHI Cleaning & Sanitation",
+          "Phase": "Pilot started on 29.10",
+          "Timing": "5 weeks",
+          "Users": "6/6 users",
+          "RisksOrBlockers": "Voice accuracy improving (74% up from 33%) but depends on A2I annotations",
+          "Notes": "N/A"
+        }
+      ]
+    },
+    {
+      "client": "CTF",
+      "overallStatus": {
+        "activeusecases": ["1", "number"],
+        "users": {
+          "total": ["20", "number"],
+          "active": ["N/A", "N/A"]
+        },
+        "voiceadoption": ["High (nearly 100%)", "string"],
+        "satisfaction": ["Happy", "string"],
+        "nextmilestone": ["Pending CEO decision", "string"]
+      },
+      "useCases": [
+        {
+          "Name": "QC (diamonds)",
+          "Phase": "Pilot completed",
+          "Timing": "N/A",
+          "Users": "~20",
+          "RisksOrBlockers": "Requires API development for scale (2-4 weeks)",
+          "Notes": "Potential to expand to ~80 users and beyond"
+        }
+      ]
+    }
+  ]
+}

@@ -74,6 +74,13 @@ body {
   width: 40px; /* Set a fixed width */
   height: 40px; /* Set a fixed height */
 }
+.button.report-button {
+  background-color: hsla(131, 70%, 49%);
+}
+
+.button.print-copy-button {
+  background-color: rgb(212, 37, 183);
+}
 
 .button svg {
   margin: 2px;
@@ -89,6 +96,7 @@ body {
   gap: 10px;
   padding: 10px;
   align-content: center;
+  width: fit-content;
 }
 
 .report-container {
@@ -100,6 +108,7 @@ body {
   width: 380px;
   margin: 0 auto;
   position: relative;
+  height: fit-content;
 }
 
 .edit-button {
@@ -119,7 +128,9 @@ body {
   border: none;
   cursor: pointer;
 }
-
+.remove-button.delete-use-case {
+  right: 0%;
+}
 
 .edit-button svg {
   width: 21px;
@@ -145,6 +156,12 @@ body {
 }
 .add-button svg {
   margin: 2px;
+}
+
+.add-button.add-use-case {
+  position: absolute;
+  right: 1.5%;
+  bottom: 5%;
 }
 
 .remove-button svg {
@@ -200,7 +217,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 5p
+  padding: 5p;
 }
 
 .use-case-card p {
@@ -221,8 +238,20 @@ body {
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 12px;
-  width: 100%;
+  width: 30px;
   box-sizing: border-box;
+}
+
+.editable-input.short {
+  width: 45px;
+}
+
+.editable-input.med {
+  width: 100px;
+}
+
+.editable-input.long {
+  width: 100%;
 }
 
 .toast {

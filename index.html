@@ -21,7 +21,7 @@
     </script>
     <div class="button-container">
       <button
-        class="button"
+        class="button print-copy-button"
         onclick="copyToClipboard()"
         title="Copy to Clipboard"
       >
@@ -46,7 +46,7 @@
           />
         </svg>
       </button>
-      <button class="button" onclick="printReport()" title="Print">
+      <button class="button print-copy-button" onclick="printReport()" title="Print">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -126,7 +126,7 @@
         </button>
       </div>
       <button
-        class="button"
+        class="button report-button"
         onclick="addClient('',{},[], true)"
         title="Add nee client"
       >
@@ -152,7 +152,7 @@
         </svg>
       </button>
       <button
-        class="button"
+        class="button report-button"
         onclick="confirmClearClients()"
         title="Clear All Clients"
       >
@@ -177,7 +177,7 @@
         </svg>
       </button>
       <button
-        class="button toggle-edit"
+        class="button report-button toggle-edit"
         onclick="toggleEditMode()"
         title="Toggle Edit Mode"
       >
@@ -205,7 +205,7 @@
         <p>No clients available</p>
         <p>Click the button below to add your first client</p>
         <button
-          class="button"
+          class="button report-button"
           onclick="addClient('',{},[], true)"
           title="Add nee client"
         >
