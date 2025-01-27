@@ -1,3 +1,37 @@
+// Global counter for use case cards
+let useCaseCount = document.querySelectorAll(".use-case-card").length;
+
+// Update counter display
+function updateUseCaseCount() {
+  useCaseCount = document.querySelectorAll(".use-case-card").length;
+  const countElements = document.querySelectorAll(".cases h2");
+  countElements.forEach((element) => {
+    element.textContent = `Use Cases (${useCaseCount})`;
+  });
+}
+
+// Add observer to track DOM changes affecting use case cards
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (
+      mutation.type === "childList" &&
+      (mutation.target.classList.contains("use-cases-container") ||
+        mutation.target.classList.contains("use-case-card"))
+    ) {
+      updateUseCaseCount();
+    }
+  });
+});
+
+// Start observing when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+  updateUseCaseCount();
+});
+
 function importFromJson(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -137,6 +171,7 @@ function addClient(
     useCases
   );
   clientsContainer.appendChild(newClient);
+  updateUseCaseCount();
   showToast("New client added");
 }
 
@@ -229,7 +264,9 @@ function createClientTemplate(
         </div>
         <div class="section cases">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <h2>Use Cases</h2>
+                <h2>Use Cases (${
+                  document.querySelectorAll(".use-case-card").length
+                })</h2>
                 <button class="add-button client-button" onclick="addUseCase(this)">
 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-table-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.5 21h-7.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v7.5" /><path d="M3 10h18" /><path d="M10 3v18" /><path d="M16 19h6" /><path d="M19 16v6" /></svg>                </button>
             </div>
@@ -251,7 +288,6 @@ function createUseCaseTemplate(
     Notes: "N/A",
   }
 ) {
-  console.log(items);
   return `
     <div class="use-case-card" style="position: relative;">
       <div style="position: absolute;top: 10px;right: 10px; display: flex; align-items: center; width: 15%; justify-content: space-between;">
