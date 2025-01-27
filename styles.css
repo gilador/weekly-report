@@ -46,7 +46,7 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #f4f4f9;
+  background-color: #e4e4ff;
   margin: 0;
   padding: 10px;
 }
@@ -100,9 +100,8 @@ body {
 }
 
 .report-container {
-  background-color: #fff;
+  background-color: #dcdcdcba;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   padding: 10px;
   width: 380px;
@@ -112,30 +111,37 @@ body {
 }
 
 .edit-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background-color: #2d87f0;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  text-align: center;
+  width: 21px; /* Set a fixed width */
+  height: 21px;
 }
 
 .remove-button {
-  position: absolute;
-  top: 10px;
-  right: 30px;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background-color: BLACK;
+  color: red;
+  font-size: 14px;
+  font-weight: 600;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-}
-.remove-button.delete-use-case {
-  right: 0%;
-}
-
-.edit-button svg {
-  width: 21px;
+  text-align: center;
+  width: 21px; /* Set a fixed width */
   height: 21px;
-  color: #2d87f0;
 }
 
 .add-button {
@@ -154,24 +160,15 @@ body {
   width: 21px; /* Set a fixed width */
   height: 21px; /* Set a fixed height */
 }
-.add-button svg {
-  margin: 2px;
+
+.remove-button.delete-use-case {
+  right: 0%;
 }
 
 .add-button.add-use-case {
   position: absolute;
   right: 1.5%;
   bottom: 5%;
-}
-
-.remove-button svg {
-  width: 21px;
-  height: 21px;
-  color: #f03d2d;
-}
-
-.edit-button:hover svg {
-  color: #1a5eaf;
 }
 
 .client-title {
@@ -183,6 +180,21 @@ body {
   color: #2d87f0;
   position: absolute;
   top: 50%;
+}
+
+.client-title input {
+  width: 40%;
+  height: 100%;
+  color: white;
+}
+
+.client-title input.editable-input {
+  width: 40% !important;
+  height: 100% !important;
+  color: #2d87f0 !important;
+  background: white !important;
+    transform: translateY(100%)
+
 }
 
 .content {
@@ -212,12 +224,12 @@ body {
 }
 
 .use-case-card {
-  background-color: #26d4464a;
-  /* Background color */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 5p;
+    background-color: #26d4464a;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
 }
 
 .use-case-card p {
