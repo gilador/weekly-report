@@ -242,6 +242,7 @@ function createClientTemplate(
 
 function createUseCaseTemplate(
   items = {
+    Status: "N/A",
     Name: "N/A",
     Phase: "N/A",
     Timing: "N/A",
