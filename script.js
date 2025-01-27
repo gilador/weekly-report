@@ -302,15 +302,36 @@ function createUseCaseTemplate(
           </svg>
         </button>
       </div>
-      ${Object.keys(items)
-        .map(
-          (key) =>
-            `<p><strong>${
-              key.charAt(0) + key.slice(1)
-            }:</strong> <span class="input-data long">${items[key]}</span></p>`
-        )
-        .join("")}
+      <div class="use-case-fields">
+        ${Object.keys(items)
+          .map(
+            (key) =>
+              `<div class="use-case-field">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="flex-grow: 1"><strong>${
+                    key.charAt(0) + key.slice(1)
+                  }:</strong> <span class="input-data long">${
+                items[key]
+              }</span></span>
+                  <button class="remove-button client-button" onclick="removeUseCaseField(this)" style="padding: 2px; margin-left: 8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 6l-12 12"></path>
+                      <path d="M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>`
+          )
+          .join("")}
+      </div>
     </div>`;
+}
+
+function removeUseCaseField(button) {
+  const fieldContainer = button.closest(".use-case-field");
+  if (fieldContainer) {
+    fieldContainer.remove();
+  }
 }
 
 function deleteClient(button) {
@@ -416,11 +437,30 @@ function reportToImage(callback) {
 }
 
 function showToast(message) {
+  const toast = document.getElementById("toast");
   toast.className = toast.className.replace("show", "");
   toast.textContent = message;
+  toast.style.cssText = `
+    visibility: visible;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 14px;
+    height: 8%;
+  `;
   toast.className = "toast show";
+
   setTimeout(() => {
     toast.className = toast.className.replace("show", "");
+    toast.style.visibility = "hidden";
   }, 3000);
 }
 function confirmClearClients() {
@@ -478,9 +518,22 @@ function toggleEditMode() {
 }
 function addItemToUseCase(useCaseCard) {
   const key = prompt("Enter the key for the new item:", "New Key");
-  const newItem = document.createElement("p");
-  newItem.innerHTML = `<strong>${key}:</strong> <span class="input-data long">...</span>`;
-  useCaseCard.appendChild(newItem);
+  if (!key) return;
+
+  const newField = document.createElement("div");
+  newField.className = "use-case-field";
+  newField.innerHTML = `
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <span style="flex-grow: 1"><strong>${key}:</strong> <span class="input-data long">N/A</span></span>
+      <button class="remove-button client-button" onclick="removeUseCaseField(this)" style="padding: 2px; margin-left: 8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6l-12 12"></path>
+          <path d="M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  `;
+  useCaseCard.querySelector(".use-case-fields").appendChild(newField);
 }
 
 function exitEditMode() {
