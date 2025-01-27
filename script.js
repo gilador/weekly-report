@@ -454,7 +454,6 @@ function showToast(message) {
     bottom: 30px;
     transform: translateX(-50%);
     font-size: 14px;
-    height: 8%;
   `;
   toast.className = "toast show";
 
