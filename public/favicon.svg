@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Document base shape with folded corner -->
+  <path 
+    d="M6 2h15l5 5v23H6V2z" 
+    fill="#007bff"
+  />
+  <path 
+    d="M21 2l5 5h-5V2z" 
+    fill="#6c757d"
+  />
+  
+  <!-- Bar chart representation (2 bars) -->
+  <rect x="11" y="12" width="4" height="8" fill="white" opacity="0.9"/>
+  <rect x="17" y="10" width="4" height="10" fill="white" opacity="0.9"/>
+  
+  <!-- Large Checkmark overlapping bars -->
+  <path 
+    d="M10 20l5 5 8-8" 
+    stroke="#28a745" 
+    stroke-width="5" 
+    fill="none" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+</svg> 

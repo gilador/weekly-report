@@ -44,11 +44,36 @@
   }
 }
 
+/* Add CSS custom properties (variables) at the root level */
+:root {
+  /* Add your color variables here - adjust these based on your actual colors */
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: #e4e4ff;
-  margin: 0;
   padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .button-container {
@@ -63,8 +88,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2px;
-  background-color: #2d87f0;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white);
   font-size: 14px;
   font-weight: 600;
   border: none;
@@ -91,12 +116,16 @@ body {
 }
 
 .clients-container {
+  flex: 1;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  align-content: center;
-  width: fit-content;
+  gap: 20px;
+  padding: 20px;
+  align-content: flex-start;
+  min-height: calc(100vh - 100px);
+  justify-content: flex-start; /* Align items from left */
+  margin: 0 auto; /* Center the container */
+  max-width: 1600px; /* Maximum width to prevent stretching on very wide screens */
 }
 
 .report-container {
@@ -105,9 +134,11 @@ body {
   overflow: hidden;
   padding: 10px;
   width: 380px;
-  margin: 0 auto;
   position: relative;
   height: fit-content;
+  margin: 0; /* Remove auto margins */
+  flex-grow: 0; /* Prevent container from growing */
+  flex-shrink: 0; /* Prevent container from shrinking */
 }
 
 .edit-button {
@@ -193,8 +224,7 @@ body {
   height: 100% !important;
   color: #2d87f0 !important;
   background: white !important;
-    transform: translateY(100%)
-
+  transform: translateY(100%);
 }
 
 .content {
@@ -224,12 +254,12 @@ body {
 }
 
 .use-case-card {
-    background-color: #26d4464a;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 10px;
+  background-color: #26d4464a;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
 }
 
 .use-case-card p {
@@ -289,10 +319,11 @@ body {
 }
 
 .empty-state {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  min-height: calc(100vh - 100px); /* Account for header and padding */
   width: 100%;
 }
 
@@ -340,4 +371,30 @@ body {
 .button.toggle-edit.edit-mode {
   background-color: #0001004a !important; /* Higher specificity */
   color: #1a5eaf;
+}
+
+.version-info {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 12px;
+  color: #666;
+  z-index: 1000;
+}
+
+.version-info span {
+  line-height: 1.4;
+}
+
+/* Replace color values with var() references */
+.button {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.alert {
+  border: 1px solid var(--warning-color);
 }
