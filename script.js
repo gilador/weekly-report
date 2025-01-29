@@ -150,6 +150,29 @@ function exportToJson() {
   showToast("Exported to JSON");
 }
 
+function createReportContainer(client) {
+  const container = document.createElement("div");
+  container.className = "report-container";
+  container.draggable = true;
+  container.dataset.clientId = client.name || "New Client";
+
+  // Add the drag icon (smiley)
+  const dragIcon = document.createElement("div");
+  dragIcon.className = "drag-icon";
+  dragIcon.textContent = "😊";
+  container.appendChild(dragIcon);
+
+  // Add the client content using the existing template
+  container.innerHTML += createClientTemplate(
+    false,
+    client.name || "New Client",
+    client.overallStatus || {},
+    client.useCases || []
+  );
+
+  return container;
+}
+
 function addClient(
   fromJson = false,
   clientName = "New Client",
@@ -165,18 +188,18 @@ function addClient(
     if (input === null) return;
     clientName = input;
   }
+
   const clientsContainer = document.querySelector(".clients-container");
-  const newClient = document.createElement("div");
-  newClient.className = "report-container";
-  newClient.innerHTML = createClientTemplate(
-    fromJson,
-    clientName,
-    overallStatus,
-    useCases
-  );
+  const newClient = createReportContainer({
+    name: clientName,
+    overallStatus: overallStatus,
+    useCases: useCases,
+  });
+
   clientsContainer.appendChild(newClient);
   updateUseCaseCount();
-  showToast("New client added");
+  debouncedShowToast("New client added");
+  initializeDragAndDrop();
 }
 
 function addUseCase(button) {
@@ -356,7 +379,7 @@ function copyToClipboard() {
         [blob.type]: blob,
       }),
     ]);
-    showToast("Copied to clipboard");
+    debouncedShowToast("Copied to clipboard");
   });
 }
 
@@ -466,6 +489,7 @@ function showToast(message) {
     toast.style.visibility = "hidden";
   }, 3000);
 }
+
 function confirmClearClients() {
   if (confirm("Are you sure you want to clear all clients?")) {
     clearClients();
@@ -499,26 +523,43 @@ function DOMListener() {
       toggleEmptyState(false);
     }
   };
+
   document.addEventListener("DOMContentLoaded", function () {
     const clientsContainer = document.querySelector(".clients-container");
     handleEmptyState();
-    const observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
+
+    // More specific mutation observer
+    const observer = new MutationObserver((mutations) => {
+      let shouldUpdate = false;
+      for (const mutation of mutations) {
         if (mutation.type === "childList") {
-          handleEmptyState();
+          shouldUpdate = true;
+          break;
         }
-      });
+      }
+      if (shouldUpdate) {
+        handleEmptyState();
+      }
     });
-    observer.observe(clientsContainer, { childList: true });
+
+    observer.observe(clientsContainer, {
+      childList: true,
+      subtree: false, // Only observe direct children
+    });
   });
+
+  initializeDragAndDrop();
 }
 
 function toggleEditMode() {
-  const clientsContainer = document.querySelector(".clients-container");
-  const toggleEditButton = document.querySelector(".toggle-edit");
-  clientsContainer.classList.toggle("edit-mode");
-  toggleEditButton.classList.toggle("edit-mode");
+  requestAnimationFrame(() => {
+    const clientsContainer = document.querySelector(".clients-container");
+    const toggleEditButton = document.querySelector(".toggle-edit");
+    clientsContainer.classList.toggle("edit-mode");
+    toggleEditButton.classList.toggle("edit-mode");
+  });
 }
+
 function addItemToUseCase(useCaseCard) {
   const key = prompt("Enter the key for the new item:", "New Key");
   if (!key) return;
@@ -633,3 +674,137 @@ function removeStatus(button) {
     listItem.remove();
   }
 }
+
+function handleDragStart(e) {
+  // Only start drag if we're clicking on the report container or drag icon
+  const reportContainer = e.target.closest(".report-container");
+  if (!reportContainer) return;
+
+  reportContainer.classList.add("dragging");
+  e.dataTransfer.setData("text/plain", reportContainer.dataset.clientId);
+}
+
+function handleDragEnter(e) {
+  const targetContainer = e.target.closest(".report-container");
+  if (targetContainer && !targetContainer.classList.contains("dragging")) {
+    // Remove drop-target class from any other containers
+    document.querySelectorAll(".drop-target").forEach((container) => {
+      if (container !== targetContainer) {
+        container.classList.remove("drop-target");
+      }
+    });
+    targetContainer.classList.add("drop-target");
+  }
+}
+
+function handleDragLeave(e) {
+  const targetContainer = e.target.closest(".report-container");
+  const relatedTarget = e.relatedTarget?.closest(".report-container");
+
+  // Only remove the drop-target class if we're actually leaving the container
+  // and not just moving between elements within the same container
+  if (
+    targetContainer &&
+    !targetContainer.contains(e.relatedTarget) &&
+    targetContainer !== relatedTarget
+  ) {
+    targetContainer.classList.remove("drop-target");
+  }
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+
+  const sourceId = e.dataTransfer.getData("text/plain");
+  const sourceElement = document.querySelector(
+    `[data-client-id="${sourceId}"]`
+  );
+  const targetElement = e.target.closest(".report-container");
+
+  if (!sourceElement || !targetElement || sourceElement === targetElement) {
+    return;
+  }
+
+  // Remove drop target styling from all containers
+  document.querySelectorAll(".drop-target").forEach((container) => {
+    container.classList.remove("drop-target");
+  });
+
+  // Get the content elements (everything inside except the drag icon)
+  const sourceContent = sourceElement.querySelector(".content");
+  const targetContent = targetElement.querySelector(".content");
+  const sourceTitle = sourceElement.querySelector(".client-title");
+  const targetTitle = targetElement.querySelector(".client-title");
+
+  // Store the HTML content
+  const sourceContentHTML = sourceContent.innerHTML;
+  const targetContentHTML = targetContent.innerHTML;
+  const sourceTitleText = sourceTitle.textContent;
+  const targetTitleText = targetTitle.textContent;
+
+  // Swap the content
+  sourceContent.innerHTML = targetContentHTML;
+  targetContent.innerHTML = sourceContentHTML;
+  sourceTitle.textContent = targetTitleText;
+  targetTitle.textContent = sourceTitleText;
+
+  // Remove dragging class
+  sourceElement.classList.remove("dragging");
+
+  // Update client order in storage
+  debouncedUpdateClientOrder();
+}
+
+function initializeDragAndDrop() {
+  const reportContainers = document.querySelectorAll(".report-container");
+
+  reportContainers.forEach((container) => {
+    container.setAttribute("draggable", "true");
+    container.addEventListener("dragstart", handleDragStart);
+    container.addEventListener("dragenter", handleDragEnter);
+    container.addEventListener("dragleave", handleDragLeave);
+    container.addEventListener("dragover", handleDragOver);
+    container.addEventListener("drop", handleDrop);
+  });
+}
+
+function updateClientOrder() {
+  const containers = document.querySelectorAll(".report-container");
+  const newOrder = Array.from(containers).map(
+    (container) => container.dataset.clientId
+  );
+  const clients = JSON.parse(localStorage.getItem("clients") || "{}");
+
+  // Create new ordered object
+  const orderedClients = {};
+  newOrder.forEach((clientId) => {
+    if (clients[clientId]) {
+      orderedClients[clientId] = clients[clientId];
+    }
+  });
+
+  localStorage.setItem("clients", JSON.stringify(orderedClients));
+}
+
+// Add at the top of the file
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Debounce the updateClientOrder function
+const debouncedUpdateClientOrder = debounce(updateClientOrder, 250);
+
+// Debounce the showToast function
+const debouncedShowToast = debounce(showToast, 100);

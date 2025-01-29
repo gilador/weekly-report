@@ -122,10 +122,11 @@ body {
   gap: 20px;
   padding: 20px;
   align-content: flex-start;
-  min-height: calc(100vh - 100px);
+  min-height: 150px; /* Ensure there's always space to drop */
   justify-content: flex-start; /* Align items from left */
   margin: 0 auto; /* Center the container */
   max-width: 1600px; /* Maximum width to prevent stretching on very wide screens */
+  contain: layout style;
 }
 
 .report-container {
@@ -136,9 +137,46 @@ body {
   width: 380px;
   position: relative;
   height: fit-content;
-  margin: 0; /* Remove auto margins */
-  flex-grow: 0; /* Prevent container from growing */
-  flex-shrink: 0; /* Prevent container from shrinking */
+  margin: 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s ease;
+  contain: content;
+}
+
+.report-container:active {
+  cursor: grabbing;
+}
+
+.report-container.dragging {
+  opacity: 0.5;
+  transform: scale(1.02);
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+.report-container.drag-over {
+  border: 2px dashed #2d87f0;
+}
+
+.report-container.drag-before {
+  border-left: 2px solid var(--success-color);
+}
+
+.report-container.drag-after {
+  border-right: 2px solid var(--success-color);
+}
+
+.report-container.drop-target {
+  border: 2px dashed var(--primary-color);
+  background-color: rgba(
+    0,
+    123,
+    255,
+    0.05
+  ); /* Using primary color with low opacity */
 }
 
 .edit-button {
@@ -260,6 +298,7 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 10px;
+  contain: content;
 }
 
 .use-case-card p {
@@ -393,8 +432,86 @@ body {
 .button {
   background-color: var(--primary-color);
   color: var(--white);
+  /* ... existing code ... */
 }
 
 .alert {
   border: 1px solid var(--warning-color);
+  /* ... existing code ... */
+}
+
+.info-button {
+  background-color: var(--info-color);
+  position: relative;
+}
+
+.info-tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  z-index: 1000;
+  color: #333;
+  text-align: left;
+}
+
+.info-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+.info-tooltip h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: var(--info-color);
+}
+
+.info-tooltip ul {
+  margin: 0;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.info-tooltip li {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.info-tooltip p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.info-button:hover .info-tooltip {
+  display: block;
+}
+
+/* Add these new styles */
+.drag-icon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: var(--primary-color);
+  z-index: 1001;
+}
+
+.report-container.dragging .drag-icon {
+  display: block;
 }

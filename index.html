@@ -6,7 +6,6 @@
     <title>Weekly Report</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/svg+xml" href="public/favicon.svg" />
-    <link rel="alternate icon" type="image/png" href="public/favicon.png" />
   </head>
 
   <body>
@@ -22,6 +21,36 @@
       DOMListener();
     </script>
     <div class="button-container">
+      <button class="button info-button" title="Help">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <div class="info-tooltip">
+          <h3>Basic Functionalities:</h3>
+          <ul>
+            <li>📋 Copy to clipboard</li>
+            <li>🖨️ Print report</li>
+            <li>💾 Export/Import JSON</li>
+            <li>➕ Add new client</li>
+            <li>🗑️ Clear all clients</li>
+            <li>✏️ Toggle edit mode</li>
+          </ul>
+          <p>⭐ Drag and drop clients to reorder them</p>
+          <p>⭐ Click edit button on each client to modify content</p>
+        </div>
+      </button>
       <button
         class="button print-copy-button"
         onclick="copyToClipboard()"
@@ -213,7 +242,7 @@
         <button
           class="button report-button"
           onclick="addClient(false,'',{},[], true)"
-          title="Add nee client"
+          title="Add new client"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
