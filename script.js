@@ -125,10 +125,14 @@ function exportToJson() {
     client.useCases = [];
     container.querySelectorAll(".use-case-card").forEach((card) => {
       const useCase = {};
-      card.querySelectorAll("p").forEach((p) => {
-        const key = p.querySelector("strong").textContent.replace(":", "");
-        const value = p.querySelector(".input-data").textContent;
-        useCase[key] = value;
+      card.querySelectorAll(".use-case-field").forEach((field) => {
+        const keyElement = field.querySelector("strong");
+        const valueElement = field.querySelector(".input-data");
+        if (keyElement && valueElement) {
+          const key = keyElement.textContent.replace(":", "");
+          const value = valueElement.textContent.trim();
+          useCase[key] = value;
+        }
       });
       client.useCases.push(useCase);
     });
