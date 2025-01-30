@@ -53,7 +53,7 @@
       </button>
       <button
         class="button print-copy-button"
-        onclick="copyToClipboard()"
+        onclick="toggleEditMode(false); copyToClipboard()"
         title="Copy to Clipboard"
       >
         <svg
@@ -79,7 +79,7 @@
       </button>
       <button
         class="button print-copy-button"
-        onclick="printReport()"
+        onclick="toggleEditMode(false); printReport()"
         title="Print"
       >
         <svg
@@ -104,7 +104,11 @@
           />
         </svg>
       </button>
-      <button class="button" onclick="exportToJson()" title="Export to json">
+      <button
+        class="button"
+        onclick="toggleEditMode(false); exportToJson()"
+        title="Export to json"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -135,7 +139,7 @@
         />
         <button
           class="button"
-          onclick="document.getElementById('jsonFileInput').click()"
+          onclick="toggleEditMode(false); document.getElementById('jsonFileInput').click()"
           title="Import form json"
         >
           <svg
@@ -162,8 +166,8 @@
       </div>
       <button
         class="button report-button"
-        onclick="addClient(false,'',{},[], true)"
-        title="Add nee client"
+        onclick="toggleEditMode(false); addClient(false,'',{},[], true)"
+        title="Add new client"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +192,7 @@
       </button>
       <button
         class="button report-button"
-        onclick="confirmClearClients()"
+        onclick="toggleEditMode(false); confirmClearClients()"
         title="Clear All Clients"
       >
         <svg
@@ -215,6 +219,7 @@
         class="button report-button toggle-edit"
         onclick="toggleEditMode()"
         title="Toggle Edit Mode"
+        data-edit-mode="false"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -234,14 +239,16 @@
         </svg>
       </button>
     </div>
-    <div class="clients-container"></div>
+    <div class="clients-container-wrapper">
+      <div class="clients-container"></div>
+    </div>
     <div id="empty-state" class="empty-state">
       <div class="empty-state-content">
         <p>No clients available</p>
         <p>Click the button below to add your first client</p>
         <button
           class="button report-button"
-          onclick="addClient(false,'',{},[], true)"
+          onclick="toggleEditMode(false); addClient(false,'',{},[], true)"
           title="Add new client"
         >
           <svg
@@ -269,7 +276,53 @@
     </div>
     <div id="toast" class="toast"></div>
     <div class="version-info">
-      <span>v1.0.0 (2024-03-01)</span>
+      <span>v1.0.1</span>
+      <button class="info-button whats-new" title="What's New">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="var(--info-color)"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <div class="info-tooltip whats-new-content">
+          <h3>What's New in v1.0.1</h3>
+          <p class="release-date">Released: March 14, 2024</p>
+          <ul>
+            <li>Added scroll to top button</li>
+            <li>Improved button formatting</li>
+            <li>Bug fixes and performance improvements</li>
+          </ul>
+        </div>
+      </button>
     </div>
+    <button
+      id="scroll-to-top"
+      class="scroll-to-top"
+      onclick="scrollToTop()"
+      title="Scroll to Top"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
   </body>
 </html>

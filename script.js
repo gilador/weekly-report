@@ -89,28 +89,27 @@ function exportToJson() {
   document.querySelectorAll(".report-container").forEach((container) => {
     const client = {};
 
-    client.overallStatus = {};
+    // Get client title
     const clientTitle = container.querySelector(".client-title");
     client.client = clientTitle ? clientTitle.textContent : "N/A";
+
+    // Get overall status - only include non-removed items
+    client.overallStatus = {};
     const overallStatusElements = container.querySelectorAll(
-      ".section.overall ul li"
+      ".section.overall ul li:not(.removed)" // Only select non-removed items
     );
 
     overallStatusElements.forEach((element) => {
-      // Extract just the key text before the colon
       const keyText = element.textContent.split(":")[0].trim();
-
       const inputSpan = element.querySelector(".input-data");
       const cleanValue = inputSpan ? inputSpan.textContent.trim() : "N/A";
 
       if (cleanValue.includes("|")) {
-        // Handle any key with pipe-separated values
         const parts = cleanValue.split("|").map((part) => {
           const [subKey, subValue] = part.split(":");
           return [subKey, subValue];
         });
 
-        // Create object with key-value pairs
         client.overallStatus[keyText] = Object.fromEntries(
           parts.map(([subKey, subValue]) => [
             subKey,
@@ -159,12 +158,11 @@ function createReportContainer(client) {
   // Add the drag icon (smiley)
   const dragIcon = document.createElement("div");
   dragIcon.className = "drag-icon";
-  dragIcon.textContent = "😊";
   container.appendChild(dragIcon);
 
   // Add the client content using the existing template
   container.innerHTML += createClientTemplate(
-    false,
+    true,
     client.name || "New Client",
     client.overallStatus || {},
     client.useCases || []
@@ -216,19 +214,17 @@ function createClientTemplate(
   overallStatus = {},
   useCases = []
 ) {
-  // Ensure overallStatus has default values if not from JSON
-  overallStatus = fromJson
-    ? overallStatus
-    : {
-        ...{
-          "Active usecases": 0,
-          Users: { Total: 0, Active: 0 },
-          "Voice adoption": "N/A",
-          Satisfaction: "N/A",
-          "Next milestone": "N/A",
-        },
-        ...overallStatus,
-      };
+  // Only apply default values if NOT importing from JSON
+  if (!fromJson) {
+    overallStatus = {
+      "Active usecases": 0,
+      Users: { Total: 0, Active: 0 },
+      "Voice adoption": "N/A",
+      Satisfaction: "N/A",
+      "Next milestone": "N/A",
+      ...overallStatus,
+    };
+  }
 
   // Ensure useCases is always an array
   useCases = Array.isArray(useCases) ? useCases : [];
@@ -237,7 +233,31 @@ function createClientTemplate(
     .map((useCase) => createUseCaseTemplate(useCase))
     .join("");
 
-  console.log(overallStatus);
+  // Create HTML for overall status items
+  const overallStatusHTML = Object.entries(overallStatus)
+    .map(([key, value]) => {
+      const val =
+        typeof value === "object" && value !== null
+          ? Object.entries(value)
+              .map(([k, v]) => `${k}:${v}`)
+              .join(" | ")
+          : value;
+
+      return `
+        <li>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="flex-grow: 1">${key}: <span class="input-data short active-use-cases"> ${val}</span></span>
+            <button class="remove-button client-button" onclick="removeStatus(this)" style="padding: 2px; margin-left: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6l-12 12"></path>
+                <path d="M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </li>`;
+    })
+    .join("");
+
   return `
   <div style="position: absolute;top: 10px;right: 10px; display: flex; align-items: center; width: 20%; justify-content: space-between;">
     <button class="remove-button client-button" onclick="deleteClient(this)">
@@ -264,29 +284,7 @@ function createClientTemplate(
                 <h2>Overall Status</h2>
             </div>
             <ul>
-            ${Object.keys(overallStatus)
-              .map((key) => {
-                val =
-                  typeof overallStatus[key] === "object" &&
-                  overallStatus[key] !== null
-                    ? Object.entries(overallStatus[key])
-                        .map(([k, v]) => `${k}:${v}`)
-                        .join(" | ")
-                    : overallStatus[key];
-                return `
-                  <li>
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                      <span style="flex-grow: 1">${key}: <span class="input-data short active-use-cases"> ${val}</span></span>
-                      <button class="remove-button client-button" onclick="removeStatus(this)" style="padding: 2px; margin-left: 8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M18 6l-12 12"></path>
-                          <path d="M6 6l12 12"></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </li>`;
-              })
-              .join("")}
+            ${overallStatusHTML}
             </ul>
         </div>
         <div class="section cases">
@@ -549,15 +547,30 @@ function DOMListener() {
   });
 
   initializeDragAndDrop();
+
+  // Initialize edit mode as disabled
+  const editButton = document.querySelector(".toggle-edit");
+  if (editButton) {
+    editButton.setAttribute("data-edit-mode", "false");
+    document.body.classList.remove("edit-mode");
+  }
 }
 
-function toggleEditMode() {
-  requestAnimationFrame(() => {
-    const clientsContainer = document.querySelector(".clients-container");
-    const toggleEditButton = document.querySelector(".toggle-edit");
-    clientsContainer.classList.toggle("edit-mode");
-    toggleEditButton.classList.toggle("edit-mode");
-  });
+function toggleEditMode(force = null) {
+  const editButton = document.querySelector(".toggle-edit");
+  const currentState = editButton.getAttribute("data-edit-mode") === "true";
+
+  // If force is provided, use that value, otherwise toggle
+  const newState = force !== null ? force : !currentState;
+
+  editButton.setAttribute("data-edit-mode", String(newState));
+  editModeEnabled = newState;
+
+  if (newState) {
+    document.body.classList.add("edit-mode");
+  } else {
+    document.body.classList.remove("edit-mode");
+  }
 }
 
 function addItemToUseCase(useCaseCard) {
@@ -671,7 +684,9 @@ function addOverallStatus(button) {
 function removeStatus(button) {
   const listItem = button.closest("li");
   if (listItem) {
-    listItem.remove();
+    // Instead of removing, add a class and hide it
+    listItem.classList.add("removed");
+    listItem.style.display = "none";
   }
 }
 
@@ -808,3 +823,20 @@ const debouncedUpdateClientOrder = debounce(updateClientOrder, 250);
 
 // Debounce the showToast function
 const debouncedShowToast = debounce(showToast, 100);
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
+// Show/hide scroll button based on scroll position
+window.addEventListener("scroll", function () {
+  const scrollButton = document.getElementById("scroll-to-top");
+  if (window.scrollY > 300) {
+    scrollButton.style.display = "block";
+  } else {
+    scrollButton.style.display = "none";
+  }
+});

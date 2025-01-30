@@ -417,15 +417,44 @@ body {
   top: 10px;
   right: 10px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  gap: 8px;
   font-size: 12px;
   color: #666;
   z-index: 1000;
 }
 
-.version-info span {
-  line-height: 1.4;
+.version-info .info-button {
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  color: var(--info-color);
+}
+
+.version-info .info-button:hover {
+  background: none;
+  opacity: 0.7;
+}
+
+.version-info .info-tooltip {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+.version-info .info-tooltip::before {
+  left: auto;
+  right: 10px;
+  transform: none;
+}
+
+.version-info .info-tooltip .release-date {
+  color: #666;
+  font-size: 12px;
+  margin: 0 0 10px 0;
+  font-style: italic;
 }
 
 /* Replace color values with var() references */
@@ -514,4 +543,36 @@ body {
 
 .report-container.dragging .drag-icon {
   display: block;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 8px;
+  transition: background-color 0.3s;
+}
+
+.scroll-to-top:hover {
+  background-color: #555;
+}
+
+.removed {
+  display: none !important;
+}
+
+/* Ensure removed items don't show up when editing */
+.edit-mode .removed {
+  display: none !important;
 }
